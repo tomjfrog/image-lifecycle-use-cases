@@ -49,5 +49,5 @@ jobs:
         with:
           registry: ${{ vars.JF_DOCKER_REGISTRY }}
           push: true
-          tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }} :${{ github.run_number }}
+          tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
