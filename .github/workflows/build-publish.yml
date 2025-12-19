@@ -43,8 +43,10 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
         with:
           registry: ${{ vars.JF_DOCKER_REGISTRY }}
           push: true
-          tags: ${{ vars.JF_DOCKER_REGISTRY }}:${{ github.run_number }}
+          tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}:${{ github.run_number }}
 
