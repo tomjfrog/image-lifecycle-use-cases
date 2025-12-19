@@ -1,7 +1,6 @@
 name: Basic Build and Publish
 on:
-  push:
-    workflow_dispatch:
+  workflow_dispatch:
 
 permissions:
   id-token: write
