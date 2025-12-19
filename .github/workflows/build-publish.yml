@@ -44,6 +44,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          registry: ${{ vars.JF_DOCKER_REGISTRY }}
           push: true
-          tags: ${{ github.run_number }}
+          tags: ${{ vars.JF_DOCKER_REGISTRY }}:${{ github.run_number }}
 
