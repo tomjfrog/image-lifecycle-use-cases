@@ -47,7 +47,6 @@ jobs:
           DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
           IMAGE_NAME: 'hello-frog'
         with:
-          registry: ${{ vars.JF_DOCKER_REGISTRY }}
           push: true
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
