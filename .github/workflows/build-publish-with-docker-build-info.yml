@@ -68,9 +68,12 @@ jobs:
       - name: Docker Build Info
         run: |
           jf rt build-docker-create \
-          --image-file ${{ steps.build-and-push.outputs.metadata }} \
+          ${{ env.DOCKER_REPOSITORY}} \
           --build-name=${{ env.BUILD_NAME }} \
           --build-number=${{ github.run_number }}
+          --image-file ${{ steps.build-and-push.outputs.metadata }} \
+          
+          
 
       - name: Publish Build Info
         run: |
