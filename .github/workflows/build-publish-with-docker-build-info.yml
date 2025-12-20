@@ -1,0 +1,74 @@
+# This is a tricky use-case to showcase how to create a build-info for a Docker image
+# that was built and pushed using the docker/build-push-action, and not using JFrog CLI.
+# In this case, we need to manually create the build-info using the 'jf rt docker-build-create' command.
+# To create the build-info, it's necessary to provide the image metadata file, which is possible when
+# Buildkit is used:
+#  "docker build uses Buildx and BuildKit by default since Docker Engine 23.0...
+# ...You don't need to read this document unless you want to use the full-featured standalone version of BuildKit."
+# Ref: https://github.com/moby/buildkit?tab=readme-ov-file
+# Ref: https://docs.docker.com/build/buildkit/
+
+
+name: 'Basic Build and Publish & Build Info: Docker'
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  security-events: write
+  attestations: write
+
+env:
+  DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
+  IMAGE_NAME: 'hello-frog'
+  BUILD_NAME: 'docker-build-info-example'
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Setup JF CLI
+        id: jfrog-cli
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_PROJECT: ${{ vars.JF_PROJECT }}
+        with:
+          version: 'latest'
+          oidc-provider-name: 'github-oidc-integration'
+          oidc-audience: 'jfrog-github'
+          disable-auto-build-publish: true
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.JF_DOCKER_REGISTRY }}
+          username: ${{ steps.jfrog-cli.outputs.oidc-user }}
+          password: ${{ steps.jfrog-cli.outputs.oidc-token }}
+
+      - name: Build and push
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+      - name: Validate Metadata File
+        run: |
+         cat ${{ steps.build-and-push.outputs.metadata }}
+
+      - name: Docker Build Info
+        run: |
+          jf rt docker-build-create \
+          --image-file ${{ steps.build-and-push.outputs.metadata }} \
+          --build-name=${{ env.BUILD_NAME }} \
+          --build-number=${{ github.run_number }}
+
