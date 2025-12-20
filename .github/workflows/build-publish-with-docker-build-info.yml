@@ -65,19 +65,19 @@ jobs:
 
       - name: Validate Metadata Content and Write to File
         run: |
-         echo "${{ steps.build-and-push.outputs.metadata }}"
-         echo "${{ steps.build-and-push.outputs.imageid }}"
-         echo "${{ steps.build-and-push.outputs.digest }}"
+         echo "Metadata: ${{ steps.build-and-push.outputs.metadata }}"
+         echo "ImageId: ${{ steps.build-and-push.outputs.imageid }}"
+         echo "Digest: ${{ steps.build-and-push.outputs.digest }}"
 
-#      - name: Docker Build Info
-#        run: |
-#          jf rt build-docker-create \
-#          ${{ env.DOCKER_REPOSITORY}} \
-#          --build-name=${{ env.BUILD_NAME }} \
-#          --build-number=${{ github.run_number }} \
-#          --image-file ${{ env.IMAGE_METADATA_FILE }} \
-#
-#      - name: Publish Build Info
-#        run: |
-#          jf rt build-publish ${{ env.BUILD_NAME }} ${{ github.run_number }}
+      - name: Docker Build Info
+        run: |
+          jf rt build-docker-create \
+          ${{ env.DOCKER_REPOSITORY}} \
+          --build-name=${{ env.BUILD_NAME }} \
+          --build-number=${{ github.run_number }} \
+          --image-file ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}@${{ steps.build-and-push.outputs.digest }} \
+
+      - name: Publish Build Info
+        run: |
+          jf rt build-publish ${{ env.BUILD_NAME }} ${{ github.run_number }}
           
