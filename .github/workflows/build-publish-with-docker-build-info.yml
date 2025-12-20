@@ -70,7 +70,7 @@ jobs:
           jf rt build-docker-create \
           ${{ env.DOCKER_REPOSITORY}} \
           --build-name=${{ env.BUILD_NAME }} \
-          --build-number=${{ github.run_number }}
+          --build-number=${{ github.run_number }} \
           --image-file ${{ steps.build-and-push.outputs.metadata }} \
           
           
