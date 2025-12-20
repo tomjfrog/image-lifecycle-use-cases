@@ -63,7 +63,7 @@ jobs:
 
       - name: Validate Metadata File
         run: |
-         cat ${{ steps.build-and-push.outputs.metadata }}
+         echo "${{ steps.build-and-push.outputs.metadata }}"
 
       - name: Docker Build Info
         run: |
