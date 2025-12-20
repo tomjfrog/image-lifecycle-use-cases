@@ -21,7 +21,9 @@ permissions:
 env:
   DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
   IMAGE_NAME: 'hello-frog'
+  IMAGE_METADATA_FILE: 'image-metadata.json'
   BUILD_NAME: 'docker-build-info-example'
+
 
 jobs:
     build:
@@ -61,9 +63,9 @@ jobs:
           push: true
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
-      - name: Validate Metadata File
+      - name: Validate Metadata Content and Write to File
         run: |
-         echo "${{ steps.build-and-push.outputs.metadata }}"
+         echo "${{ steps.build-and-push.outputs.metadata }}" > ${{ env.IMAGE_METADATA_FILE }}
 
       - name: Docker Build Info
         run: |
@@ -71,9 +73,7 @@ jobs:
           ${{ env.DOCKER_REPOSITORY}} \
           --build-name=${{ env.BUILD_NAME }} \
           --build-number=${{ github.run_number }} \
-          --image-file ${{ steps.build-and-push.outputs.metadata }} \
-          
-          
+          --image-file ${{ env.IMAGE_METADATA_FILE }} \
 
       - name: Publish Build Info
         run: |
