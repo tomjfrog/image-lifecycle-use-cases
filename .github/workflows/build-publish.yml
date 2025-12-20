@@ -7,6 +7,10 @@ permissions:
   security-events: write
   attestations: write
 
+env:
+  DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
+  IMAGE_NAME: 'hello-frog'
+
 jobs:
     build:
       runs-on: ubuntu-latest
@@ -40,9 +44,6 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v6
-        env:
-          DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
-          IMAGE_NAME: 'hello-frog'
         with:
           push: true
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
