@@ -71,7 +71,12 @@ jobs:
 
       - name: Create Image Metadata File
         run: |
-          echo "${{ steps.build-and-push.outputs.metadata }}" > ${{ env.IMAGE_METADATA_FILE }}
+          echo "${{ vars.JF_DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}" > ${{ env.IMAGE_METADATA_FILE }}
+          echo "@${{ steps.build-and-push.outputs.digest }}" >> ${{ env.IMAGE_METADATA_FILE }}
+
+      - name: Display Image MetadataFile
+        run: |
+          cat ${{ env.IMAGE_METADATA_FILE }}  
 
       - name: Docker Build Info
         run: |
