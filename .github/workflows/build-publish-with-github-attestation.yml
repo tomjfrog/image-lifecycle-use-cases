@@ -44,8 +44,9 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v6
-        id: push
+        id: build-and-push
         with:
+          context: .
           push: true
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
@@ -53,6 +54,6 @@ jobs:
         uses: actions/attest-build-provenance@v3
         id: attest
         with:
-          subject-name: oci://${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-name: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.build-and-push.outputs.digest }}
           push-to-registry: true
