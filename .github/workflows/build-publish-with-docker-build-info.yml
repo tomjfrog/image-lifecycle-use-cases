@@ -69,13 +69,17 @@ jobs:
          echo "ImageId: ${{ steps.build-and-push.outputs.imageid }}"
          echo "Digest: ${{ steps.build-and-push.outputs.digest }}"
 
+      - name: Create Image Metadata File
+        run: |
+          echo "${{ steps.build-and-push.outputs.metadata }}" > ${{ env.IMAGE_METADATA_FILE }}
+
       - name: Docker Build Info
         run: |
           jf rt build-docker-create \
           ${{ env.DOCKER_REPOSITORY}} \
           --build-name=${{ env.BUILD_NAME }} \
           --build-number=${{ github.run_number }} \
-          --image-file ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}@${{ steps.build-and-push.outputs.digest }} \
+          --image-file ${{ env.IMAGE_METADATA_FILE }} \
 
       - name: Publish Build Info
         run: |
