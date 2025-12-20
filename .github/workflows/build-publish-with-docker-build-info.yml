@@ -76,7 +76,7 @@ jobs:
           set -euo pipefail
         
           IMAGE_REF="$(printf '%s' '${{ steps.build.outputs.metadata }}' \
-            | .github/actions/scripts/extract-image-ref.sh)"
+            | .github/scripts/extract-image-ref.sh)"
 
           # Write ONLY the image reference to a file
           printf '%s' "$IMAGE_REF" > ${{ env.IMAGE_METADATA_FILE }}
