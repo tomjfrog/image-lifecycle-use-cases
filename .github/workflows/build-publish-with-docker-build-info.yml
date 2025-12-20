@@ -21,7 +21,7 @@ permissions:
 env:
   DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
   IMAGE_NAME: 'hello-frog'
-  IMAGE_METADATA_FILE: 'image-metadata.json'
+  IMAGE_METADATA_FILE: 'image-metadata'
   BUILD_NAME: 'docker-build-info-example'
 
 
