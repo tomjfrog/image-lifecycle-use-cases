@@ -71,7 +71,7 @@ jobs:
 
       - name: Create Image Metadata File
         run: |
-          echo "${{ vars.JF_DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}" > ${{ env.IMAGE_METADATA_FILE }}
+          echo "${{ vars.JF_DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}@${{ steps.build-and-push.outputs.digest }}" > ${{ env.IMAGE_METADATA_FILE }}
 
       - name: Display Image MetadataFile
         run: |
