@@ -61,7 +61,7 @@ jobs:
 
       - name: Validate Metadata Content and Write to File
         run: |
-         echo ${{ steps.build-and-push.outputs.metadata }}"
+         echo "${{ steps.build-and-push.outputs.metadata }}"
 
       - name: Create Metadata File
         run: |
