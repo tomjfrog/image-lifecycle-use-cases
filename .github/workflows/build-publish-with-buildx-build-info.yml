@@ -57,13 +57,12 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v6
         with:
-          provenance: true
           push: true
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
       - name: Validate Metadata Content and Write to File
+        needs: build-and-push
         run: |
-         echo "Metadata echo'ed from steps.build-and-push.outputs.metadata: " 
          echo ${{ steps.build-and-push.outputs.metadata }}"
 
       - name: Create Metadata File
