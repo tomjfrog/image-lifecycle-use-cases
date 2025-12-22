@@ -64,9 +64,8 @@ jobs:
 
       - name: Validate Metadata Content and Write to File
         run: |
-         echo "Metadata: ${{ steps.build-and-push.outputs.metadata }}"
-         echo "ImageId: ${{ steps.build-and-push.outputs.imageid }}"
-         echo "Digest: ${{ steps.build-and-push.outputs.digest }}"
+         echo "Metadata echo'ed from steps.build-and-push.outputs.metadata: " 
+         echo ${{ steps.build-and-push.outputs.metadata }}"
 
       - name: Create Metadata File
         run: |
