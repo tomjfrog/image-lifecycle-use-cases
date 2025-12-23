@@ -59,13 +59,18 @@ jobs:
           push: true
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
-      - name: Validate Metadata Content and Write to File
-        run: |
-         echo ${{ steps.build-and-push.outputs.metadata }}
-
       - name: Create Metadata File
+        env:
+          # This maps the JSON string safely to an env var
+          BUILD_METADATA: ${{ steps.build-and-push.outputs.metadata }}
         run: |
-          echo "${{ steps.build-and-push.outputs.metadata }}" > ${{ env.IMAGE_METADATA_FILENAME }}
+          # Use the env var, quoted, to pipe into a file
+          echo "$BUILD_METADATA" > ${{ env.IMAGE_METADATA_FILENAME }}
+
+      - name: Validate Metadata File (Optional)
+        run: |
+          # Using jq to verify it's valid JSON and pretty-print it
+          cat ${{ env.IMAGE_METADATA_FILENAME }} | jq .
 
       - name: Validate Metadata File Content
         run: |
