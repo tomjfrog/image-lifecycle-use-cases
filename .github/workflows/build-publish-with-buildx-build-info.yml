@@ -76,17 +76,6 @@ jobs:
         run: |
          cat ${{ env.IMAGE_METADATA_FILENAME }}
 
-      # Until this is more elegantly supported, we manually create the image metadata file.  Note the format is:
-      # <registry>/<image-name>:<tag>@<digest>
-      # repository is not part of the image name in this context., see the jf rt build-docker-create command below.
-      - name: Create Image Metadata File
-        run: |
-          echo "${{ vars.JF_DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}@${{ steps.build-and-push.outputs.digest }}" > ${{ env.IMAGE_METADATA_FILE }}
-
-      - name: Display Image MetadataFile
-        run: |
-          cat ${{ env.IMAGE_METADATA_FILE }}  
-
       - name: Docker Build Info
         run: |
           jf rt build-docker-create \
