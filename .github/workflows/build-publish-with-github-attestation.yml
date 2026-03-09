@@ -30,10 +30,8 @@ jobs:
           JF_URL: ${{ vars.JF_URL }}
           JF_PROJECT: ${{ vars.JF_PROJECT }}
         with:
-          version: 'latest'
           oidc-provider-name: 'github-oidc-integration'
           oidc-audience: 'jfrog-github'
-          disable-auto-build-publish: true
 
       - name: Docker Login
         uses: docker/login-action@v3
