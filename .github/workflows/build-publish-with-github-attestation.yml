@@ -52,5 +52,5 @@ jobs:
         uses: actions/attest-build-provenance@v3
         id: attest
         with:
-          subject-name: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}
+          subject-name: oci://${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.build-and-push.outputs.digest }}
