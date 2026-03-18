@@ -83,38 +83,64 @@ GET .../api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11
 GET .../api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11?list&deep=1
 ```
 
----
+#### Recorded result: GET …?properties
 
-## 2. Artifactory – Download / Raw content
-
-**Spec:** `artifacts-and-storage-api.openapi.yaml` (Artifact Retrieval)
-
-### GET Retrieve artifact (file content)
-
-```
-GET /{repoKey}/{artifactPath}
-```
-
-**Example:**
-```
-GET https://tomjfrog.jfrog.io/artifactory/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json
-```
-
-**Returns:** Raw file body (the JSON content of `list.manifest.json`). Use when you need the actual manifest content (e.g. list of manifest digests for the multi-arch image).
-
----
-
-### GET Artifact sync download (optional no-content / progress)
-
-```
-GET /api/download/{repoKey}/{filePath}
+**Request:** `GET {base}/artifactory/api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json?properties`  
+**HTTP status:** `200`  
+**Response body:**
+```json
+{
+  "properties": {
+    "artifactory.content-type": ["application/vnd.oci.image.index.v1+json"],
+    "docker.manifest": ["11"],
+    "docker.manifest.digest": ["sha256:21a2be7d3e45134541b1d9edd62cdce91ae300999c6d8ec78690be6177d7768e"],
+    "docker.manifest.type": ["application/vnd.oci.image.index.v1+json"],
+    "docker.repoName": ["hello-frog-multi-arch"],
+    "jf.branch": ["main"],
+    "jf.revision": ["7cb76c2adff36b54cf5bb388223e74d0ab936bd2"],
+    "jf.vcsUrl": ["https://github.com/tomjfrog/image-lifecycle-use-cases"],
+    "sha256": ["21a2be7d3e45134541b1d9edd62cdce91ae300999c6d8ec78690be6177d7768e"]
+  },
+  "uri": "https://tomjfrog.jfrog.io/artifactory/api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json"
+}
 ```
 
-Optional: `?content=none` or `?content=progress` and `?mark=<bytes>`.
+#### Recorded result: GET …?stats
 
-**Example:**
+**Request:** `GET {base}/artifactory/api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json?stats`  
+**HTTP status:** `200`  
+**Response body:**
+```json
+{
+  "uri": "https://tomjfrog.jfrog.io/artifactory/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json",
+  "downloadCount": 2,
+  "lastDownloaded": 1773849221513,
+  "lastDownloadedBy": "tomj@jfrog.com",
+  "remoteDownloadCount": 0,
+  "remoteLastDownloaded": 0
+}
 ```
-GET https://tomjfrog.jfrog.io/artifactory/api/download/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json
+
+#### Recorded result: GET folder …?list&deep=1
+
+**Request:** `GET {base}/artifactory/api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11?list&deep=1`  
+**HTTP status:** `200`  
+**Response body:**
+```json
+{
+  "uri": "https://tomjfrog.jfrog.io/artifactory/api/storage/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11",
+  "created": "2026-03-18T16:03:54.615Z",
+  "files": [
+    {
+      "uri": "/list.manifest.json",
+      "size": 1609,
+      "lastModified": "2026-03-18T15:29:05.628Z",
+      "folder": false,
+      "sha1": "d2a79827c62961ee50f064938338f5e56f64b15c",
+      "sha2": "21a2be7d3e45134541b1d9edd62cdce91ae300999c6d8ec78690be6177d7768e"
+    }
+  ]
+}
 ```
 
 ---
@@ -149,6 +175,39 @@ items.find({"repo":"p-apitesting-docker-multiarch-local","path":"hello-frog-mult
 
 **Returns:** Search result set with the fields you requested. Useful when you want to query by path/name and get checksums and timestamps in one call.
 
+#### Recorded result
+
+**Request:** `POST {base}/artifactory/api/search/aql` with body (AQL above).  
+**HTTP status:** `200`  
+**Response body:**
+```json
+{
+  "results": [
+    {
+      "repo": "p-apitesting-docker-multiarch-local",
+      "path": "hello-frog-multi-arch/11",
+      "name": "list.manifest.json",
+      "type": "file",
+      "size": 1609,
+      "created": "2026-03-18T15:29:05.628Z",
+      "created_by": "tomj@jfrog.com",
+      "modified": "2026-03-18T15:29:05.628Z",
+      "modified_by": "tomj@jfrog.com",
+      "updated": "2026-03-18T15:29:06.121Z",
+      "actual_md5": "cae373df7b77c7ad36a4ca0ee0ad8c63",
+      "actual_sha1": "d2a79827c62961ee50f064938338f5e56f64b15c",
+      "sha256": "21a2be7d3e45134541b1d9edd62cdce91ae300999c6d8ec78690be6177d7768e"
+    }
+  ],
+  "range": {
+    "start_pos": 0,
+    "end_pos": 1,
+    "total": 1,
+    "limit": 500000
+  }
+}
+```
+
 ---
 
 ## 4. Artifactory – File compliance (deprecated)
@@ -168,6 +227,22 @@ GET https://tomjfrog.jfrog.io/artifactory/api/compliance/p-apitesting-docker-mul
 
 **Note:** Deprecated from Artifactory 5.0; prefer Xray for compliance/security.
 
+#### Recorded result
+
+**Request:** `GET {base}/artifactory/api/compliance/p-apitesting-docker-multiarch-local/hello-frog-multi-arch/11/list.manifest.json`  
+**HTTP status:** `404`  
+**Response body:**
+```json
+{
+  "errors": [
+    {
+      "status": 404,
+      "message": "Not found"
+    }
+  ]
+}
+```
+
 ---
 
 ## 5. Docker API (catalog / tags – image-level, not this file)
@@ -183,6 +258,65 @@ For your repo/image:
 ```
 GET https://tomjfrog.jfrog.io/artifactory/api/docker/p-apitesting-docker-multiarch-local/v2/_catalog
 GET https://tomjfrog.jfrog.io/artifactory/api/docker/p-apitesting-docker-multiarch-local/v2/hello-frog-multi-arch/manifests/11
+```
+
+#### Recorded result: GET _catalog
+
+**Request:** `GET {base}/artifactory/api/docker/p-apitesting-docker-multiarch-local/v2/_catalog`  
+**HTTP status:** `200`  
+**Response body:**
+```json
+{
+  "repositories": [
+    "hello-frog-multi-arch"
+  ]
+}
+```
+
+#### Recorded result: GET manifests/11
+
+**Request:** `GET {base}/artifactory/api/docker/p-apitesting-docker-multiarch-local/v2/hello-frog-multi-arch/manifests/11` with `Accept: application/vnd.oci.image.index.v1+json`  
+**HTTP status:** `200`  
+**Response body:**
+```json
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.index.v1+json",
+  "manifests": [
+    {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:f97133c3a664254ad6f384c80342fe0da2ad8d55bcc6d84e56634c529ac0fc74",
+      "size": 1241,
+      "platform": { "architecture": "amd64", "os": "linux" }
+    },
+    {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:6b7c9eba1b9e1307e62e7a2f4095fcee8cdc6f141774c504953e18ef9141f731",
+      "size": 1241,
+      "platform": { "architecture": "arm64", "os": "linux" }
+    },
+    {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:2847d876431ffaaaf953b9afbe2fe03cfa43d3f2d442eab7b03e744ec178cf78",
+      "size": 565,
+      "annotations": {
+        "vnd.docker.reference.digest": "sha256:f97133c3a664254ad6f384c80342fe0da2ad8d55bcc6d84e56634c529ac0fc74",
+        "vnd.docker.reference.type": "attestation-manifest"
+      },
+      "platform": { "architecture": "unknown", "os": "unknown" }
+    },
+    {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:93827b5641ace5fc78a3f61f12f00d8e5d45760afd673d4d66069ea5e0e049c2",
+      "size": 565,
+      "annotations": {
+        "vnd.docker.reference.digest": "sha256:6b7c9eba1b9e1307e62e7a2f4095fcee8cdc6f141774c504953e18ef9141f731",
+        "vnd.docker.reference.type": "attestation-manifest"
+      },
+      "platform": { "architecture": "unknown", "os": "unknown" }
+    }
+  ]
+}
 ```
 
 Use these when you need **image/tag** metadata; for the **file** `list.manifest.json` use the storage and download endpoints above.
