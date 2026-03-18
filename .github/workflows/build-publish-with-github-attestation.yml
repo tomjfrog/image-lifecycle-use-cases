@@ -8,8 +8,8 @@ permissions:
   attestations: write
 
 env:
-  DOCKER_REPOSITORY: 'apitesting-docker-local'
-  IMAGE_NAME: 'hello-frog'
+  DOCKER_REPOSITORY: 'p-apitesting-docker-multiarch-local'
+  IMAGE_NAME: 'hello-frog-multi-arch'
 
 jobs:
     build:
@@ -22,6 +22,9 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Setup JF CLI
         id: jfrog-cli
@@ -46,6 +49,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ vars.JF_DOCKER_REGISTRY }}/${{ env.DOCKER_REPOSITORY}}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
       - name: Attest
