@@ -8,7 +8,7 @@ permissions:
   attestations: write
 
 env:
-  DOCKER_REPOSITORY: 'imagelifecycle-docker-local'
+  DOCKER_REPOSITORY: 'apitesting-docker-local'
   IMAGE_NAME: 'hello-frog'
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: ${{ vars.JF_URL }}
-          JF_PROJECT: ${{ vars.JF_PROJECT }}
+          JF_PROJECT: p-apitesting
         with:
           oidc-provider-name: 'github-oidc-integration'
           oidc-audience: 'jfrog-github'
