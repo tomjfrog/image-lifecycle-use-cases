@@ -39,7 +39,6 @@ jobs:
           JF_PROJECT: p-apitesting
         with:
           oidc-provider-name: 'github-oidc-integration'
-          oidc-audience: 'jfrog-github'
 
       - name: Docker Login
         uses: docker/login-action@v4
